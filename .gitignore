@@ -13,3 +13,6 @@ Clean System Files/
 *-data/
 *-www/
 *-sapl/
+
+### Project Specific ###
+src/Bots/
