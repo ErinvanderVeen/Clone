@@ -1,2 +1,2 @@
-# Clean-bots
+# Clone
 A huggin-like application written in clean

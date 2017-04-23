@@ -1,7 +1,6 @@
 implementation module Bot
 
 import System.Process, Data.Error, StdEnv, System._Posix
-import StdDebug
 
 runBot :: Bot String !*World -> (Maybe String, *World)
 runBot bot input world
@@ -22,4 +21,4 @@ where
 	| isError err = abort "Could not read stdOut"
 	# result = fromOk err
 	| result == "" = (Nothing, world)
-	= trace_n result (Just result, world)
+	= (Just result, world)
