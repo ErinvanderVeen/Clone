@@ -1,0 +1,14 @@
+{
+	"bots": [
+		{
+			"name": "test.sh",
+			"interval": 1,
+			"children": ["example"]
+		},
+		{
+			"name": "example",
+			"interval": 5,
+			"children": []
+		}
+	]
+}
