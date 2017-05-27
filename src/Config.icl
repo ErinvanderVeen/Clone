@@ -30,7 +30,8 @@ where
 	fromJSONArray _ = Nothing
 
 	toBot :: JSONNode -> Bot
-	toBot node = {Bot | name=fromJust (jsonQuery "name" node),
+	toBot node=:(JSONObject _) = 
+	             {Bot | name=fromJust (jsonQuery "name" node),
 	                    children=fromJust (jsonQuery "children" node),
 	                    interval=fromJust (jsonQuery "interval" node)
 	             }
