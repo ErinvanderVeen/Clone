@@ -30,5 +30,8 @@ where
 	fromJSONArray _ = Nothing
 
 	toBot :: JSONNode -> Bot
-	toBot (JSONObject _) = abort "Not yet implemented"
+	toBot node = {Bot | name=fromJust (jsonQuery "name" node),
+	                    children=fromJust (jsonQuery "children" node),
+	                    interval=fromJust (jsonQuery "interval" node)
+	             }
 	toBot _ = abort "Could not parse bot in config file"
