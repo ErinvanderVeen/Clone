@@ -2,12 +2,12 @@ implementation module Bot
 
 import System.Process, Data.Error, StdEnv, System._Posix
 
-runBot :: Bot String !*World -> (Maybe String, *World)
-runBot bot input world
+runBot :: Bot !*World -> (Maybe String, *World)
+runBot bot world
 # (err, world) = runProcessIO ("bots/" +++ bot.name) [] Nothing world
 | isError err = abort ("Could not start bot: " +++ bot.name +++ "\n" +++ snd (fromError err))
 # (handle, io) = fromOk err
-# (err, world) = writePipe input io.stdIn world
+# (err, world) = writePipe (fromMaybe "" bot.input) io.stdIn world
 | isError err = abort ("Could not write to stdIn of " +++ bot.name +++ "\n" +++ snd (fromError err))
 # (err, world) = closePipe io.stdIn world
 | isError err = abort "Could not close StdIn pipe"

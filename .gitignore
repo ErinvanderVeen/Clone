@@ -15,5 +15,5 @@ Clean System Files/
 *-sapl/
 
 ### Project Specific ###
-src/bots/
+src/bots
 src/Clone

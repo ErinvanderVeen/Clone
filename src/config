@@ -1,13 +1,13 @@
 {
 	"bots": [
 		{
-			"name": "test.sh",
+			"name": "test_message",
 			"interval": 1,
-			"children": ["example"]
+			"children": ["send_telegram"]
 		},
 		{
-			"name": "example",
-			"interval": 5,
+			"name": "send_telegram",
+			"interval": 0,
 			"children": []
 		}
 	]

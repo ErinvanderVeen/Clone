@@ -33,6 +33,7 @@ where
 	toBot node=:(JSONObject _) = 
 	             {Bot | name=fromJust (jsonQuery "name" node),
 	                    children=fromJust (jsonQuery "children" node),
-	                    interval=fromJust (jsonQuery "interval" node)
+	                    interval=fromJust (jsonQuery "interval" node),
+	                    input=Nothing
 	             }
 	toBot _ = abort "Could not parse bot in config file"
