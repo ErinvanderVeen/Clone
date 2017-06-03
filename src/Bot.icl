@@ -1,6 +1,11 @@
 implementation module Bot
 
-import System.Process, Data.Error, StdEnv, System._Posix
+import StdString
+from StdMisc import abort
+from StdTuple import snd
+
+import System.Process, Data.Error, System._Posix
+from Data.List import isnull
 
 runBot :: Bot !*World -> (Maybe String, *World)
 runBot bot world
@@ -12,7 +17,7 @@ runBot bot world
 # (err, world) = closePipe io.stdIn world
 | isError err = abort "Could not close StdIn pipe"
 # (err, world) = waitForProcess handle world
-| bot.children == [] = (Nothing, world)
+| isnull bot.children = (Nothing, world)
 = readStdOut io.stdOut world
 where
 	readStdOut :: ReadPipe !*World -> (Maybe String, *World)

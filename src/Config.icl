@@ -34,6 +34,7 @@ where
 	             {Bot | name=fromJust (jsonQuery "name" node),
 	                    children=fromJust (jsonQuery "children" node),
 	                    interval=fromJust (jsonQuery "interval" node),
-	                    input=Nothing
+	                    input=Nothing,
+	                    root=fromJust (jsonQuery "root" node)
 	             }
 	toBot _ = abort "Could not parse bot in config file"

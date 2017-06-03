@@ -12,3 +12,9 @@ newBotQueue :: BotQueue
 // @param The Queue that the bot needs to be inserted into
 // @param The Bot that needs to be inserted
 insertBot :: BotQueue Bot -> BotQueue
+
+allBotsOnZero :: BotQueue -> ([Bot], BotQueue)
+
+decrementAll :: BotQueue -> BotQueue
+
+runRequired :: BotQueue -> Bool

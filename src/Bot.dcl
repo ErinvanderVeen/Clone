@@ -6,7 +6,8 @@ import StdTuple, Data.Maybe
 	name :: String,
 	children :: [String],
 	interval :: Int,
-	input :: Maybe String
+	input :: Maybe String,
+	root :: Bool
 	}
 
 /**

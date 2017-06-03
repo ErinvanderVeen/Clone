@@ -3,12 +3,14 @@
 		{
 			"name": "test_message",
 			"interval": 1,
-			"children": ["send_telegram"]
+			"children": ["send_telegram"],
+			"root": true
 		},
 		{
 			"name": "send_telegram",
 			"interval": 0,
-			"children": []
+			"children": [],
+			"root": false
 		}
 	]
 }
