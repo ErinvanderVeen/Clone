@@ -1,0 +1,8 @@
+#!/usr/bin/env python3
+import telegram
+import sys
+import json
+
+json_in = json.loads(sys.stdin.read())
+bot = telegram.Bot(token="YOUR_BOT_TOKEN")
+bot.sendMessage(chat_id="YOUR_CHAT_ID", text=json_in["content"])

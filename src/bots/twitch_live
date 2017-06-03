@@ -1,0 +1,26 @@
+#!/usr/bin/env python3
+from twitch import TwitchClient
+import pickle
+import sys
+
+CLIENT_ID = "YOUR_CLIENT_ID"
+OAUTH_TOKEN = "YOUR_OAUTH_TOKEN"
+
+client = TwitchClient(CLIENT_ID, OAUTH_TOKEN)
+livestreams = client.streams.get_followed()
+livestream_names = [stream.channel.display_name for stream in livestreams]
+
+try:
+    previous = pickle.load(open("twitch_live.cache", "rb"))
+except IOError:
+    previous = []
+
+new_streams = [stream for stream in livestream_names if stream not in previous]
+
+pickle.dump(livestream_names, open("twitch_live.cache", "wb"))
+
+if new_streams:
+    sys.stdout.write("{ 'content': '")
+    for stream in new_streams:
+        sys.stdout.write(stream + ", ")
+    sys.stdout.write("is/are now live'}")
