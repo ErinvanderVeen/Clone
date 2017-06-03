@@ -1,7 +1,7 @@
 {
 	"bots": [
 		{
-			"name": "test_message",
+			"name": "twitch_live",
 			"interval": 1,
 			"children": ["send_telegram"],
 			"root": true
