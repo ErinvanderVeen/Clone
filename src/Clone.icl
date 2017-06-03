@@ -8,11 +8,11 @@ from StdListExtensions import foldrSt
 import StdString, StdInt
 
 Start world
+# queue = newBotQueue
+# (config, world) = parseConfig world
 // Platform hasn't yet implemented workingdir for runProcessIO
 // So we must physically change dir
 # (_, world) = chdir "bots/" world
-# queue = newBotQueue
-# (config, world) = parseConfig world
 # queue = foldr addIfRootBot queue config.bots
 = loop config queue world
 
