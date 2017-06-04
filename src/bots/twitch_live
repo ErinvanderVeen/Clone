@@ -23,4 +23,4 @@ if new_streams:
     sys.stdout.write("{ \"messages\": [{ \"content\": \"")
     for stream in new_streams:
         sys.stdout.write(stream + ", ")
-    sys.stdout.write("is/are now live\"}]")
+    sys.stdout.write("is/are now live\"}]}")
