@@ -32,7 +32,7 @@ output = ""
 
 if new_entries:
     output += "{ \"messages\": ["
-    for entry in entries:
+    for entry in new_entries:
         output += "{ \"content\": \""
         output += entry["title"] + "\\n" + entry["link"]
         output += "\"},"
