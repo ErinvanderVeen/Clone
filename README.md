@@ -1,2 +1,5 @@
 # Clone
-A huggin-like application written in clean
+A [huginn][]-like application written in [Clean][]
+
+[Clean]: http://clean.cs.ru.nl
+[huginn]: https://github.com/cantino/huginn/
