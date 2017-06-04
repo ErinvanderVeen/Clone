@@ -17,7 +17,7 @@ loop :: Config BotQueue !*World -> ()
 loop config queue world
 # queue = decrementAll queue
 # (queue, world) = runRequiredBots config queue world
-# (_, world) = waitMinute world
+# (_, world) = sleep 60 world
 = loop config queue world
 
 runRequiredBots :: Config BotQueue !*World -> (!BotQueue, !*World)
@@ -48,7 +48,7 @@ addIfRootBot bot queue
 | bot.root = addToQueue bot queue
 | otherwise = queue
 
-waitMinute :: !*World -> (!Int, !*World)
-waitMinute w = code {
-	ccall waitMinute ":I:A"
+sleep :: !Int !*World -> *(!Int, !*World)
+sleep i w = code {
+	ccall sleep "I:I:A"
 }
