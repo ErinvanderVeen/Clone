@@ -4,5 +4,7 @@ import sys
 import json
 
 json_in = json.loads(sys.stdin.read())
-bot = telegram.Bot(token="YOUR_BOT_TOKEN")
-bot.sendMessage(chat_id="YOUR_CHAT_ID", text=json_in["content"])
+
+for message in json_in["messages"]:
+    bot = telegram.Bot(token="YOUR_BOT_TOKEN")
+    bot.sendMessage(chat_id=YOUR_CHAT_ID, text=message["content"])

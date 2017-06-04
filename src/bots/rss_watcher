@@ -1,0 +1,41 @@
+#!/usr/bin/env python3
+import feedparser
+import pickle
+import sys
+
+rss_url = "http://feeds.nos.nl/nosnieuwsalgemeen"
+
+rss_feed = feedparser.parse(rss_url);
+
+entries = rss_feed["entries"]
+
+sorted_entries = sorted(entries, key=lambda entry: entry["published_parsed"])
+sorted_entries.reverse()
+
+most_recent = sorted_entries[0]
+
+try:
+    previous = pickle.load(open("rss_watcher.cache", "rb"))
+except IOError:
+    previous = {}
+
+new_entries = []
+
+for entry in sorted_entries:
+    if entry == previous:
+        break;
+    new_entries.append(entry);
+
+pickle.dump(most_recent, open("rss_watcher.cache", "wb"))
+
+output = ""
+
+if new_entries:
+    output += "{ \"messages\": ["
+    for entry in entries:
+        output += "{ \"content\": \""
+        output += entry["title"] + "\\n" + entry["link"]
+        output += "\"},"
+    output = output[:-1]
+    output += "]}"
+    print(output)
