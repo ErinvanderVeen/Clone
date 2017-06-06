@@ -22,7 +22,7 @@ except IOError:
 new_entries = []
 
 for entry in sorted_entries:
-    if entry == previous:
+    if entry["id"] == previous["id"]:
         break;
     new_entries.append(entry);
 
