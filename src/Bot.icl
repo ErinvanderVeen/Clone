@@ -15,10 +15,13 @@ runBot bot world
 # (err, world) = writePipe (fromMaybe "" bot.input) io.stdIn world
 | isError err = abort ("Could not write to stdIn of " +++ bot.name +++ "\n" +++ snd (fromError err))
 # (err, world) = closePipe io.stdIn world
-| isError err = abort "Could not close StdIn pipe"
+| isError err = abort "Could not close stdIn pipe"
 # (err, world) = waitForProcess handle world
+# (result, world) = readStdOut io.stdOut world
+# (err, world) = closePipe io.stdOut world
+| isError err = abort "Could not close stdOut pipe"
 | isnull bot.children = (Nothing, world)
-= readStdOut io.stdOut world
+= (result, world)
 where
 	readStdOut :: ReadPipe !*World -> (Maybe String, *World)
 	readStdOut pipe world
