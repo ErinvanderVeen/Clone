@@ -18,3 +18,5 @@ allBotsOnZero :: BotQueue -> ([Bot], BotQueue)
 decrementAll :: BotQueue -> BotQueue
 
 runRequired :: BotQueue -> Bool
+
+getWaitTime :: BotQueue -> Int

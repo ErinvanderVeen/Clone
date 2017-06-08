@@ -2,13 +2,13 @@
 	"bots": [
 		{
 			"name": "twitch_live",
-			"interval": 10,
+			"interval": 600,
 			"children": ["send_telegram"],
 			"root": true
 		},
 		{
 			"name": "rss_watcher",
-			"interval": 10,
+			"interval": 600,
 			"children": ["send_telegram"],
 			"root": true
 		},
