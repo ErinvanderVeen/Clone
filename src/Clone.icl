@@ -5,6 +5,7 @@ import Data.Maybe, Data.List
 from System._Posix import select_, chdir
 from System._Pointer import :: Pointer
 from StdListExtensions import foldrSt
+from StdFunc import o
 import StdString, StdInt
 
 Start world
@@ -23,29 +24,24 @@ loop config queue world
 runRequiredBots :: Config BotQueue !*World -> (!BotQueue, !*World)
 runRequiredBots config queue world
 # (requiredBots, queue) = allBotsOnZero queue
-# (queue, world) = foldrSt (\b (q, w) -> runBotAndChildren q config b w) requiredBots (queue, world)
+# (queue, world) = foldrSt (uncurry o runBotAndChildren config) requiredBots (queue, world)
 | runRequired queue = runRequiredBots config queue world
 | otherwise = (queue, world)
 
-runBotAndChildren :: !BotQueue Config Bot !*World -> (!BotQueue, !*World)
-runBotAndChildren queue config bot world
+runBotAndChildren :: Config Bot !BotQueue !*World -> (!BotQueue, !*World)
+runBotAndChildren config bot queue world
 # (result, world) = runBot bot world
-# queue = addIfRootBot (findBot config bot.name) queue
+# queue = addIfRootBot (findBot bot.name config) queue
 | isNothing result = (queue, world)
-# children = [findBot config x \\ x <- bot.children]
-# children = map (\c -> {c & input = result}) children
-# queue = foldr addToQueue queue children
+# queue = foldr (\c -> insertBot {findBot c config & input=result}) queue bot.children
 = (queue, world)
 where
-	findBot :: Config String -> Bot
-	findBot config name = fromJust (find (\b -> b.name == name) config.bots)
-
-addToQueue :: Bot BotQueue -> BotQueue
-addToQueue bot queue = insertBot queue bot
+	findBot :: String Config -> Bot
+	findBot name config = fromJust (find (\b -> b.name == name) config.bots)
 
 addIfRootBot :: Bot BotQueue -> BotQueue
 addIfRootBot bot queue
-| bot.root = addToQueue bot queue
+| bot.root = insertBot bot queue
 | otherwise = queue
 
 sleep :: !Int !*World -> *(!Int, !*World)

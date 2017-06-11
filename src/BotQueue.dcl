@@ -5,13 +5,18 @@ import Bot
 
 :: BotQueue
 
-// Creates an empty BotQueue
+/**
+ * Creates an empty BotQueue
+ */
 newBotQueue :: BotQueue
 
-// Inserts a bot into the correct position in the queue
-// @param The Queue that the bot needs to be inserted into
-// @param The Bot that needs to be inserted
-insertBot :: BotQueue Bot -> BotQueue
+/**
+ * Inserts a bot into the correct position in the queue
+ * @param The Bot that needs to be inserted
+ * @param The Queue that the bot needs to be inserted into
+ * @result The new Queue
+ */
+insertBot :: Bot BotQueue -> BotQueue
 
 allBotsOnZero :: BotQueue -> ([Bot], BotQueue)
 

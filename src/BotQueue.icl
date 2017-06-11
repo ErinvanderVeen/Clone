@@ -10,10 +10,10 @@ import StdInt
 newBotQueue :: BotQueue
 newBotQueue = []
 
-insertBot :: BotQueue Bot -> BotQueue
-insertBot [] bot = [bot]
-insertBot [x:xs] bot
-| bot.interval >= x.interval = [x : insertBot xs bot]
+insertBot :: Bot BotQueue -> BotQueue
+insertBot bot [] = [bot]
+insertBot bot [x:xs]
+| bot.interval >= x.interval = [x : insertBot bot xs]
 | otherwise = [bot] ++ [x:xs]
 
 allBotsOnZero :: BotQueue -> ([Bot], BotQueue)
