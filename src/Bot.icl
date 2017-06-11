@@ -9,7 +9,7 @@ from Data.List import isnull
 
 runBot :: Bot !*World -> (Maybe String, *World)
 runBot bot world
-# (err, world) = runProcessIO ("bots/" +++ bot.name) [] (Just "bots/") world
+# (err, world) = runProcessIO ("./" +++ bot.name) [] (Just "bots") world
 | isError err = abort ("Could not start bot: " +++ bot.name +++ "\n" +++ snd (fromError err))
 # (handle, io) = fromOk err
 # (err, world) = writePipe (fromMaybe "" bot.input) io.stdIn world
