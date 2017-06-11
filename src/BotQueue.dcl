@@ -20,7 +20,7 @@ insertBot :: Bot BotQueue -> BotQueue
 
 allBotsOnZero :: BotQueue -> ([Bot], BotQueue)
 
-decrementAll :: BotQueue -> BotQueue
+mapQueue :: ((Bot -> Bot) BotQueue -> BotQueue)
 
 runRequired :: BotQueue -> Bool
 

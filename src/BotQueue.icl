@@ -21,8 +21,8 @@ allBotsOnZero :: BotQueue -> ([Bot], BotQueue)
 allBotsOnZero queue
 = splitWith (\b -> b.interval == 0) queue
 
-decrementAll :: BotQueue -> BotQueue
-decrementAll queue = map (\x -> {x & interval = x.interval - 1}) queue
+mapQueue :: ((Bot -> Bot) BotQueue -> BotQueue)
+mapQueue = map
 
 runRequired :: BotQueue -> Bool
 runRequired [] = False

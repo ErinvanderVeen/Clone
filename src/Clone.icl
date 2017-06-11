@@ -16,10 +16,12 @@ Start world
 
 loop :: Config BotQueue !*World -> ()
 loop config queue world
-# queue = decrementAll queue
 # (queue, world) = runRequiredBots config queue world
-# (_, world) = sleep (getWaitTime queue) world
+# queue = mapQueue (\b -> {b & interval = b.interval - time}) queue
+# (_, world) = sleep time world
 = loop config queue world
+where
+	time = getWaitTime queue
 
 runRequiredBots :: Config BotQueue !*World -> (!BotQueue, !*World)
 runRequiredBots config queue world
