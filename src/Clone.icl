@@ -18,7 +18,7 @@ loop :: Config BotQueue !*World -> ()
 loop config queue world
 # queue = decrementAll queue
 # (queue, world) = runRequiredBots config queue world
-# (_, world) = sleep 60 world
+# (_, world) = sleep (getWaitTime queue) world
 = loop config queue world
 
 runRequiredBots :: Config BotQueue !*World -> (!BotQueue, !*World)
