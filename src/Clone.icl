@@ -8,6 +8,7 @@ from StdListExtensions import foldrSt
 from StdFunc import o
 import StdString, StdInt
 
+Start :: !*World -> ()
 Start world
 # queue = newBotQueue
 # (config, world) = parseConfig world

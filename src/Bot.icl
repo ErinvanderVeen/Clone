@@ -20,6 +20,8 @@ runBot bot world
 # (result, world) = readStdOut io.stdOut world
 # (err, world) = closePipe io.stdOut world
 | isError err = abort "Could not close stdOut pipe"
+# (err, world) = closePipe io.stdErr world
+| isError err = abort "Could not close stdErr pipe"
 | isnull bot.children = (Nothing, world)
 = (result, world)
 where
