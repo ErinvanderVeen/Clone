@@ -12,10 +12,10 @@ create_socket w = code {
 wait :: Int Socket !*World -> (!String, !*World)
 wait time socket world
 # (resPointer, world) = wait` time socket world
-# result = unpackString resPointer
+# result = derefString resPointer
 = (result, world)
 where
 	wait` :: !Int !Int !*World -> (Pointer, !*World)
-	wait` :: t s w = code {
+	wait` t s w = code {
 		ccall wait "II:I:A"
 	}

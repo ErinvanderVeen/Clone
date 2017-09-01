@@ -1,6 +1,6 @@
 module Clone
 
-import Config, BotQueue, Bot
+import Config, BotQueue, Bot, IPC
 import Data.Maybe, Data.List
 from System._Posix import select_, chdir
 from System._Pointer import :: Pointer
@@ -8,19 +8,24 @@ from StdListExtensions import foldrSt
 from StdFunc import o
 import StdString, StdInt
 
+import StdDebug
+
 Start :: !*World -> ()
 Start world
+# (socket, world) = create_socket world
 # queue = newBotQueue
 # (config, world) = parseConfig world
 # queue = foldr addIfRootBot queue config.bots
-= loop config queue world
+= loop config queue socket world
 
-loop :: Config BotQueue !*World -> ()
-loop config queue world
+loop :: Config BotQueue Socket !*World -> ()
+loop config queue socket world
 # (queue, world) = runRequiredBots config queue world
 # queue = mapQueue (\b -> {b & interval = b.interval - time}) queue
-# (_, world) = sleep time world
-= loop config queue world
+// TODO: Start and end countdown
+# (interruptString, world) = wait time socket world
+//# (queue, world)  = interruptString
+= trace_n interruptString loop config queue socket world
 where
 	time = getWaitTime queue
 
@@ -46,8 +51,3 @@ addIfRootBot :: Bot BotQueue -> BotQueue
 addIfRootBot bot queue
 | bot.root = insertBot bot queue
 | otherwise = queue
-
-sleep :: !Int !*World -> *(!Int, !*World)
-sleep i w = code {
-	ccall sleep "I:I:A"
-}
