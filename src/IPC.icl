@@ -4,7 +4,7 @@ import System._Pointer
 
 :: Socket :== Int
 
-create_socket :: !*World -> (Socket, !*World)
+create_socket :: !*World -> (!Socket, !*World)
 create_socket w = code {
 	ccall create_socket ":I:A"
 }
@@ -15,7 +15,7 @@ wait time socket world
 # result = derefString resPointer
 = (result, world)
 where
-	wait` :: !Int !Int !*World -> (Pointer, !*World)
+	wait` :: !Int !Int !*World -> (!Pointer, !*World)
 	wait` t s w = code {
 		ccall wait "II:I:A"
 	}

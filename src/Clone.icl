@@ -25,7 +25,7 @@ loop config queue socket world
 // TODO: Start and end countdown
 # (interruptString, world) = wait time socket world
 //# (queue, world)  = interruptString
-= trace_n interruptString loop config queue socket world
+= loop config queue socket world
 where
 	time = getWaitTime queue
 

@@ -51,6 +51,8 @@ char* wait(unsigned int timeout, int socket_fd) {
 
 	FD_SET(socket_fd, &readfds);
 
+	int string_length = 0;
+
 	if ((s_rc = select(socket_fd + 1, &readfds, NULL, NULL, &timeout_val)) == -1) {
 		return NULL;
 	} else if (s_rc == 0) {
@@ -62,8 +64,12 @@ char* wait(unsigned int timeout, int socket_fd) {
 		}
 
 		while ((rc = read(cl,buf,sizeof(buf))) > 0) {
-			result = realloc(result, sizeof(result) + rc + 1);
-			strcat(result, buf);
+			if(sizeof(result) < string_length + rc + 1) {
+				result = realloc(result, string_length + rc + 1);
+			}
+			strncpy(&result[string_length], buf, rc);
+			string_length += rc;
+			result[string_length] = '\0';
 		}
 		if (rc == -1) {
 			return NULL;
