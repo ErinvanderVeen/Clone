@@ -4,6 +4,7 @@ import Config, BotQueue, Bot, IPC
 import Data.Maybe, Data.List
 from System._Posix import select_, chdir
 from System._Pointer import :: Pointer
+from System.Time import ::Timestamp, time, diffTime
 from StdListExtensions import foldrSt
 from StdFunc import o
 import StdString, StdInt
@@ -21,13 +22,22 @@ Start world
 loop :: Config BotQueue Socket !*World -> ()
 loop config queue socket world
 # (queue, world) = runRequiredBots config queue world
-# queue = mapQueue (\b -> {b & interval = b.interval - time}) queue
-// TODO: Start and end countdown
-# (interruptString, world) = wait time socket world
-//# (queue, world)  = interruptString
+# (queue, world) = sleepUntilRun config queue socket world
 = loop config queue socket world
-where
-	time = getWaitTime queue
+
+sleepUntilRun :: Config BotQueue Socket !*World -> (!BotQueue, !*World)
+sleepUntilRun config queue socket world 
+# sleepTime = getWaitTime queue
+# (startTime, world) = time world
+# (interruptString, world) = wait sleepTime socket world
+| interruptString == "" = trace_n "Sleep completed" (mapQueue (\b -> {b & interval = b.interval - sleepTime}) queue, world)
+# (endTime, world) = trace_n "Interrupted" time world
+# timeSlept = diffTime endTime startTime
+// TODO: Handle interrupt
+// Transmission of data might take too long
+| sleepTime - timeSlept <= 0 = (mapQueue (\b -> {b & interval = b.interval - sleepTime}) queue, world)
+# queue = trace_n timeSlept mapQueue (\b -> {b & interval = b.interval - timeSlept}) queue
+= sleepUntilRun config queue socket world
 
 runRequiredBots :: Config BotQueue !*World -> (!BotQueue, !*World)
 runRequiredBots config queue world

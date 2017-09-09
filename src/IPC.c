@@ -36,10 +36,11 @@ int create_socket() {
 }
 
 char* wait(unsigned int timeout, int socket_fd) {
-	char buf[1024];
+	char buf[256];
 	struct timeval timeout_val;
 	int cl, s_rc, rc;
-	char* result = NULL;
+	// malloc(0) to prevent sizeof() to return 8
+	char* result = malloc(0);
 
 	fd_set readfds;
 
@@ -63,6 +64,8 @@ char* wait(unsigned int timeout, int socket_fd) {
 			return NULL;
 		}
 
+		// TODO: Determine what to do if transmission takes longer
+		// than the timeoutval
 		while ((rc = read(cl,buf,sizeof(buf))) > 0) {
 			if(sizeof(result) < string_length + rc + 1) {
 				result = realloc(result, string_length + rc + 1);
@@ -71,6 +74,7 @@ char* wait(unsigned int timeout, int socket_fd) {
 			string_length += rc;
 			result[string_length] = '\0';
 		}
+		
 		if (rc == -1) {
 			return NULL;
 		} else if (rc == 0) {
