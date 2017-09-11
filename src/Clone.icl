@@ -2,6 +2,7 @@ module Clone
 
 import Config, BotQueue, Bot, IPC
 import Data.Maybe, Data.List
+from Text.JSON import instance fromString JSONNode
 from System._Posix import select_, chdir
 from System._Pointer import :: Pointer
 from System.Time import ::Timestamp, time, diffTime
@@ -28,16 +29,21 @@ loop config queue socket world
 sleepUntilRun :: Config BotQueue Socket !*World -> (!BotQueue, !*World)
 sleepUntilRun config queue socket world 
 # sleepTime = getWaitTime queue
+| sleepTime == 0 = (queue, world)
 # (startTime, world) = time world
 # (interruptString, world) = wait sleepTime socket world
 | interruptString == "" = trace_n "Sleep completed" (mapQueue (\b -> {b & interval = b.interval - sleepTime}) queue, world)
 # (endTime, world) = trace_n "Interrupted" time world
 # timeSlept = diffTime endTime startTime
-// TODO: Handle interrupt
-// Transmission of data might take too long
-| sleepTime - timeSlept <= 0 = (mapQueue (\b -> {b & interval = b.interval - sleepTime}) queue, world)
-# queue = trace_n timeSlept mapQueue (\b -> {b & interval = b.interval - timeSlept}) queue
+# queue = mapQueue (\b -> {b & interval = min 0 (b.interval - timeSlept)}) queue
+# queue = handleInterrupt config interruptString queue
 = sleepUntilRun config queue socket world
+
+handleInterrupt :: Config String BotQueue -> BotQueue
+handleInterrupt config interruptString queue
+# node = fromString interruptString
+# bot = toBot node
+= insertBot bot queue
 
 runRequiredBots :: Config BotQueue !*World -> (!BotQueue, !*World)
 runRequiredBots config queue world
