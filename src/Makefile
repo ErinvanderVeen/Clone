@@ -1,5 +1,5 @@
 INCLUDES:=-I $$CLEAN_HOME/lib/Platform -I $$CLEAN_HOME/lib/Generics -I $$CLEAN_HOME/lib/StdLib
-FLAGS:=-l -no-pie
+FLAGS:=-no-opt-link -l -no-pie -l -static
 CLIBS:=-l IPC.o
 EXE:=Clone
 
