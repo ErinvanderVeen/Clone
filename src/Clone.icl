@@ -10,8 +10,6 @@ from StdListExtensions import foldrSt
 from StdFunc import o
 import StdString, StdInt
 
-import StdDebug
-
 Start :: !*World -> ()
 Start world
 # (socket, world) = create_socket world
@@ -32,8 +30,9 @@ sleepUntilRun config queue socket world
 | sleepTime == 0 = (queue, world)
 # (startTime, world) = time world
 # (interruptString, world) = wait sleepTime socket world
-| interruptString == "" = trace_n "Sleep completed" (mapQueue (\b -> {b & interval = b.interval - sleepTime}) queue, world)
-# (endTime, world) = trace_n "Interrupted" time world
+// TODO: Socket can be closed with no content
+| interruptString == "" = (mapQueue (\b -> {b & interval = b.interval - sleepTime}) queue, world)
+# (endTime, world) = time world
 # timeSlept = diffTime endTime startTime
 # queue = mapQueue (\b -> {b & interval = min 0 (b.interval - timeSlept)}) queue
 # queue = handleInterrupt config interruptString queue
