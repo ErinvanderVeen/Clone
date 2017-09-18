@@ -1,28 +1,48 @@
 module Clone
 
-import Config, BotQueue, Bot
+import Config, BotQueue, Bot, IPC
 import Data.Maybe, Data.List
+from Text.JSON import instance fromString JSONNode
 from System._Posix import select_, chdir
 from System._Pointer import :: Pointer
+from System.Time import ::Timestamp, time, diffTime
 from StdListExtensions import foldrSt
 from StdFunc import o
 import StdString, StdInt
 
 Start :: !*World -> ()
 Start world
+# (socket, world) = create_socket world
 # queue = newBotQueue
 # (config, world) = parseConfig world
 # queue = foldr addIfRootBot queue config.bots
-= loop config queue world
+= loop config queue socket world
 
-loop :: Config BotQueue !*World -> ()
-loop config queue world
+loop :: Config BotQueue Socket !*World -> ()
+loop config queue socket world
 # (queue, world) = runRequiredBots config queue world
-# queue = mapQueue (\b -> {b & interval = b.interval - time}) queue
-# (_, world) = sleep time world
-= loop config queue world
-where
-	time = getWaitTime queue
+# (queue, world) = sleepUntilRun config queue socket world
+= loop config queue socket world
+
+sleepUntilRun :: Config BotQueue Socket !*World -> (!BotQueue, !*World)
+sleepUntilRun config queue socket world 
+# sleepTime = getWaitTime queue
+| sleepTime == 0 = (queue, world)
+# (startTime, world) = time world
+# (interruptString, world) = wait sleepTime socket world
+// TODO: Socket can be closed with no content
+| interruptString == "" = (mapQueue (\b -> {b & interval = b.interval - sleepTime}) queue, world)
+# (endTime, world) = time world
+# timeSlept = diffTime endTime startTime
+# queue = mapQueue (\b -> {b & interval = min 0 (b.interval - timeSlept)}) queue
+# queue = handleInterrupt config interruptString queue
+= sleepUntilRun config queue socket world
+
+handleInterrupt :: Config String BotQueue -> BotQueue
+handleInterrupt config interruptString queue
+# node = fromString interruptString
+# bot = toBot node
+= insertBot bot queue
 
 runRequiredBots :: Config BotQueue !*World -> (!BotQueue, !*World)
 runRequiredBots config queue world
@@ -46,8 +66,3 @@ addIfRootBot :: Bot BotQueue -> BotQueue
 addIfRootBot bot queue
 | bot.root = insertBot bot queue
 | otherwise = queue
-
-sleep :: !Int !*World -> *(!Int, !*World)
-sleep i w = code {
-	ccall sleep "I:I:A"
-}

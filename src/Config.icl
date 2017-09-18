@@ -29,12 +29,13 @@ where
 	fromJSONArray (JSONArray x) = Just x
 	fromJSONArray _ = Nothing
 
-	toBot :: JSONNode -> Bot
-	toBot node=:(JSONObject _) = 
-	             {Bot | name=fromJust (jsonQuery "name" node),
-	                    children=fromJust (jsonQuery "children" node),
-	                    interval=fromJust (jsonQuery "interval" node),
-	                    input=Nothing,
-	                    root=fromJust (jsonQuery "root" node)
-	             }
-	toBot _ = abort "Could not parse bot in config file"
+// TODO: Allow parsing input argument for bot creation
+toBot :: JSONNode -> Bot
+toBot node=:(JSONObject _) = 
+	     {Bot | name=fromJust (jsonQuery "name" node),
+		    children=fromJust (jsonQuery "children" node),
+		    interval=fromJust (jsonQuery "interval" node),
+		    input=Nothing,
+		    root=fromJust (jsonQuery "root" node)
+	     }
+toBot _ = abort "Could not parse bot in config file"
