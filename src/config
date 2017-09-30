@@ -2,43 +2,46 @@
 	"bots": [
 		{
 			"name": "twitch_live",
-			"exe": "twitch_live",
-			"env_vars": {"TOKEN": "$TOKEN"},
-			"interval": 600,
+				"exe": "twitch_live",
+				"vars": {
+					"token": "$TOKEN"
+				},
+				"interval": 600,
+				"children": [
+					"send_telegram"
+				]
 		},
 		{
 			"name": "news",
 			"exe": "rss_watcher",
-			"args": ["--feed", "feeds.nos.nl/nosnieuwsalgemeen"],
+			"vars": {
+				"feed": "feeds.nos.nl/nosnieuwsalgemeen"
+			},
 			"interval": 600,
+			"children": [
+				"send_telegram"
+			]
 		},
 		{
 			"name": "github",
 			"exe": "rss_watcher",
-			"args": ["--feed", "github.com/ErinvanderVeen.private.atom?token=TOKEN"],
+			"vars": {
+				"feed": "github.com/ErinvanderVeen.private.atom"
+			},
 			"interval": 600,
+			"children": [
+				"send_telegram"
+			]
 		},
 		{
 			"name": "send_telegram",
 			"exe": "send_telegram",
-			"interval": 0,
+			"interval": 0
 		}
 	],
-
-	"chains": [
-		{
-			"name": "news",
-			"children":  [{"name": "send_telegram"}],
-		},
-		{
-			"name": "github",
-			"children":  [{"name": "send_telegram"}],
-		},
-		{
-			"name": "twitch_live",
-			"children":  [{"name": "send_telegram"}],
-		},
-
-
+	"root_bots": [
+		"twitch_live",
+		"news",
+		"github"
 	]
 }
