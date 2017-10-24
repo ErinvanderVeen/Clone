@@ -12,6 +12,15 @@ definition module IPC
 create_socket :: !*World -> (!Socket, !*World)
 
 /**
+ * Initializes some datastructures for the wait function
+ * In particular, adds the socket to a set for the
+ * select call in wait.
+ * @param The Socket FileDesciptor
+ * @result The Socket FileDescriptor (we cannot call voids)
+ */
+setup_socket :: !Socket !*World -> (!Socket, !*World)
+
+/**
  * Calls a C function that both waits untill the next bot
  * needs to be executed, but also listens for interupts
  * @param The amount of time that a sleep is required in seconds

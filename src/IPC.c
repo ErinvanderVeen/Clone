@@ -64,6 +64,9 @@ int setup_socket(int socket_fd) {
 
 	// Clone only supports waiting for whole seconds (for now)
 	timeout_val.tv_usec = 0;
+
+	// We have to return something
+	return socket_fd;
 }
 
 char* wait(unsigned int timeout, int socket_fd) {
