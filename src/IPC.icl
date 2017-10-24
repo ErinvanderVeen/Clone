@@ -9,9 +9,9 @@ create_socket w = code {
 	ccall create_socket ":I:A"
 }
 
-setup_socket :: !Socket !*World -> (!Socket, !*World)
+setup_socket :: !Socket !*World -> *World
 setup_socket s w = code {
-	ccall setup_socket "I:I:A"
+	ccall setup_socket "I:V:A"
 }
 
 wait :: Int Socket !*World -> (!String, !*World)

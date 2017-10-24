@@ -16,9 +16,8 @@ create_socket :: !*World -> (!Socket, !*World)
  * In particular, adds the socket to a set for the
  * select call in wait.
  * @param The Socket FileDesciptor
- * @result The Socket FileDescriptor (we cannot call voids)
  */
-setup_socket :: !Socket !*World -> (!Socket, !*World)
+setup_socket :: !Socket !*World -> *World
 
 /**
  * Calls a C function that both waits untill the next bot

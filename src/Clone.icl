@@ -13,7 +13,7 @@ import StdString, StdInt
 Start :: !*World -> ()
 Start world
 # (socket, world) = create_socket world
-# (socket, world) = setup_socket socket world
+# world = setup_socket socket world
 # queue = newBotQueue
 # (config, world) = parseConfig world
 # queue = foldr addIfRootBot queue config.bots
