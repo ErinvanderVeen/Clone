@@ -9,7 +9,7 @@ import System.Process, Data.Error, System._Posix
 
 runBot :: Bot (Maybe String) *World -> (Maybe String, *World)
 runBot bot input world
-# (err, world) = runProcessIO ("./" +++ bot.exe) [] (Just "bots") world
+# (err, world) = runProcessIO ("./" +++ bot.exe) (flattenBotVars bot.vars) (Just "bots") world
 | isError err = abort ("Could not start bot: " +++ bot.name +++ "\n" +++ snd (fromError err))
 # (handle, io) = fromOk err
 # (err, world) = writePipe (fromMaybe "" input) io.stdIn world
@@ -32,3 +32,7 @@ where
 	# result = fromOk err
 	| result == "" = (Nothing, world)
 	= (Just result, world)
+
+	flattenBotVars :: [(String, String)] -> [String]
+	flattenBotVars [] = []
+	flattenBotVars [(a, b) : vs] = [a, b : flattenBotVars vs]
