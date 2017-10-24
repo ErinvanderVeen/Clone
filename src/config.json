@@ -1,0 +1,45 @@
+{
+	"bots": [
+		{
+			"name": "twitch_live",
+			"exe": "twitch_live",
+			"vars": {
+				"token": "$TOKEN"
+			},
+			"interval": 600,
+			"children": [
+				"send_telegram"
+			],
+			"root": true
+		},
+		{
+			"name": "news",
+			"exe": "rss_watcher",
+			"vars": {
+				"feed": "feeds.nos.nl/nosnieuwsalgemeen"
+			},
+			"interval": 600,
+			"children": [
+				"send_telegram"
+			],
+			"root": true
+		},
+		{
+			"name": "github",
+			"exe": "rss_watcher",
+			"vars": {
+				"feed": "github.com/ErinvanderVeen.private.atom"
+			},
+			"interval": 600,
+			"children": [
+				"send_telegram"
+			],
+			"root": true
+		},
+		{
+			"name": "send_telegram",
+			"exe": "send_telegram",
+			"interval": 0
+		}
+	]
+}
