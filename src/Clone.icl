@@ -65,8 +65,8 @@ runBotAndChildren config entry queue world
 # (results, world) = runEntry entry world
 # queue = addIfRootBot (findBot entry.bot.name config) queue
 | isNothing results = (queue, world)
-| isNothing entry.bot.children = (queue, world)
-# queue = updateOrAddChildren config (fromJust entry.bot.children) queue (fromJust results)
+| isEmpty entry.bot.children = (queue, world)
+# queue = updateOrAddChildren config entry.bot.children queue (fromJust results)
 = (queue, world)
 
 findBot :: String Config -> Bot

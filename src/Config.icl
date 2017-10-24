@@ -41,7 +41,7 @@ toBot node=:(JSONObject _) =
 			exe      = fromJust (jsonQuery "exe" node),
 			vars     = fromJust (jsonQuery "vars" node),
 			interval = fromJust (jsonQuery "interval" node),
-			children = jsonQuery "children" node,
+			children = fromJust (jsonQuery "children" node),
 			root     = fromJust (jsonQuery "root" node)
 		}
 toBot _ = abort "Could not parse bot in config file"

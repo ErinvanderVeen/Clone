@@ -22,7 +22,7 @@ runBot bot input world
 | isError err = abort "Could not close stdOut pipe"
 # (err, world) = closePipe io.stdErr world
 | isError err = abort "Could not close stdErr pipe"
-| isNothing bot.children = (Nothing, world)
+| isEmpty bot.children = (Nothing, world)
 = (result, world)
 where
 	readStdOut :: ReadPipe !*World -> (Maybe String, *World)

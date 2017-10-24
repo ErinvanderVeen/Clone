@@ -8,7 +8,7 @@ import StdTuple, Data.Maybe, Text.JSON
 	exe :: String,
 	vars :: [(String, String)],
 	interval :: Int,
-	children :: Maybe [String],
+	children :: [String],
 	root :: Bool
 	}
 
