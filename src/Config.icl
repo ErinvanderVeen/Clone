@@ -39,9 +39,9 @@ toBot node=:(JSONObject _) =
 		{Bot |
 			name     = fromJust (jsonQuery "name" node),
 			exe      = fromJust (jsonQuery "exe" node),
-			vars     = fromJust (jsonQuery "vars" node),
+			vars     = fromMaybe [] (jsonQuery "vars" node),
 			interval = fromJust (jsonQuery "interval" node),
-			children = fromJust (jsonQuery "children" node),
-			root     = fromJust (jsonQuery "root" node)
+			children = fromMaybe [] (jsonQuery "children" node),
+			root     = fromMaybe False (jsonQuery "root" node)
 		}
 toBot _ = abort "Could not parse bot in config file"
