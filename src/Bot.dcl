@@ -1,12 +1,14 @@
 definition module Bot
 
-import StdTuple, Data.Maybe
+import StdTuple, Data.Maybe, Text.JSON
 
+// Should be 1-on-1 with the Configuration file
 :: Bot = {
 	name :: String,
-	children :: [String],
+	exe :: String,
+	vars :: [(String, String)],
 	interval :: Int,
-	input :: Maybe String,
+	children :: Maybe [String],
 	root :: Bool
 	}
 
@@ -14,4 +16,4 @@ import StdTuple, Data.Maybe
 * Runs a bot
 * @param The Bot record
 */
-runBot :: Bot !*World -> (Maybe String, *World)
+runBot :: Bot (Maybe String) *World -> (Maybe String, *World)

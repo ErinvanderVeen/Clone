@@ -5,6 +5,7 @@ import System.File, Text.JSON, Data.Maybe
 from Data.Error import isError, fromOk
 from StdMisc import abort
 from StdFile import instance FileSystem World
+from StdFunc import o
 
 parseConfig :: !*World -> (Config, *World)
 parseConfig w
@@ -20,22 +21,27 @@ parseConfig w
 where
 	readConfig :: !*World -> (String, *World)
 	readConfig w
-	# (result, w) = readFile "config" w
+	# (result, w) = readFile "config.json" w
 	| isError result = abort "Could not read from config file"
 	# result = fromOk result
 	= (result, w)
 
-	fromJSONArray :: JSONNode -> Maybe [JSONNode]
-	fromJSONArray (JSONArray x) = Just x
-	fromJSONArray _ = Nothing
+fromJSONArray :: JSONNode -> Maybe [JSONNode]
+fromJSONArray (JSONArray x) = Just x
+fromJSONArray _ = Nothing
 
-// TODO: Allow parsing input argument for bot creation
+fromJSONObject :: JSONNode -> [(!String, !JSONNode)]
+fromJSONObject (JSONObject x) = x
+fromJSONObject _ = abort "Could not retrieve JSONObject"
+
 toBot :: JSONNode -> Bot
-toBot node=:(JSONObject _) = 
-	     {Bot | name=fromJust (jsonQuery "name" node),
-		    children=fromJust (jsonQuery "children" node),
-		    interval=fromJust (jsonQuery "interval" node),
-		    input=Nothing,
-		    root=fromJust (jsonQuery "root" node)
-	     }
+toBot node=:(JSONObject _) =
+		{Bot |
+			name     = fromJust (jsonQuery "name" node),
+			exe      = fromJust (jsonQuery "exe" node),
+			vars     = fromJust (jsonQuery "vars" node),
+			interval = fromJust (jsonQuery "interval" node),
+			children = jsonQuery "children" node,
+			root     = fromJust (jsonQuery "root" node)
+		}
 toBot _ = abort "Could not parse bot in config file"

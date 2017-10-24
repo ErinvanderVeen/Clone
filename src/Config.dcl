@@ -3,7 +3,9 @@ definition module Config
 import Bot
 from Text.JSON import :: JSONNode
 
-:: Config = { bots :: [Bot] }
+:: Config = {
+		bots :: [Bot]
+	}
 
 /**
 * Parses the config located in the root dir

@@ -3,16 +3,16 @@ implementation module Bot
 import StdString
 from StdMisc import abort
 from StdTuple import snd
+from StdList import isEmpty
 
 import System.Process, Data.Error, System._Posix
-from Data.List import isnull
 
-runBot :: Bot !*World -> (Maybe String, *World)
-runBot bot world
+runBot :: Bot (Maybe String) *World -> (Maybe String, *World)
+runBot bot input world
 # (err, world) = runProcessIO ("./" +++ bot.name) [] (Just "bots") world
 | isError err = abort ("Could not start bot: " +++ bot.name +++ "\n" +++ snd (fromError err))
 # (handle, io) = fromOk err
-# (err, world) = writePipe (fromMaybe "" bot.input) io.stdIn world
+# (err, world) = writePipe (fromMaybe "" input) io.stdIn world
 | isError err = abort ("Could not write to stdIn of " +++ bot.name +++ "\n" +++ snd (fromError err))
 # (err, world) = closePipe io.stdIn world
 | isError err = abort "Could not close stdIn pipe"
@@ -22,7 +22,7 @@ runBot bot world
 | isError err = abort "Could not close stdOut pipe"
 # (err, world) = closePipe io.stdErr world
 | isError err = abort "Could not close stdErr pipe"
-| isnull bot.children = (Nothing, world)
+| isNothing bot.children = (Nothing, world)
 = (result, world)
 where
 	readStdOut :: ReadPipe !*World -> (Maybe String, *World)
