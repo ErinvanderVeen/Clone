@@ -9,7 +9,7 @@ import System.Process, Data.Error, System._Posix
 
 runBot :: Bot (Maybe String) *World -> (Maybe String, *World)
 runBot bot input world
-# (err, world) = runProcessIO ("./" +++ bot.name) [] (Just "bots") world
+# (err, world) = runProcessIO ("./" +++ bot.exe) [] (Just "bots") world
 | isError err = abort ("Could not start bot: " +++ bot.name +++ "\n" +++ snd (fromError err))
 # (handle, io) = fromOk err
 # (err, world) = writePipe (fromMaybe "" input) io.stdIn world
