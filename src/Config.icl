@@ -6,6 +6,7 @@ from Data.Error import isError, fromOk
 from StdMisc import abort
 from StdFile import instance FileSystem World
 from StdFunc import o
+from StdList import map
 
 parseConfig :: !*World -> (Config, *World)
 parseConfig w
